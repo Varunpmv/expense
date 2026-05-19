@@ -1,4 +1,4 @@
-import { getAdminData } from '../actions/admin';
+import { getAdminData, getSmtpSettings } from '../actions/admin';
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import AdminDashboardClient from '@/components/AdminDashboardClient';
@@ -10,7 +10,6 @@ export default async function AdminPage() {
     redirect('/');
   }
 
-  const { users, configs, getSmtpSettings } = await import('../actions/admin').then(m => ({ ...m }));
   const { users: usersData, configs: configsData, customFields, settings } = await getAdminData();
   const smtpSettings = await getSmtpSettings();
 

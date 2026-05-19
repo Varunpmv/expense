@@ -129,7 +129,7 @@ export async function getFinanceDashboardData() {
   const approvedOrPaid = enrichedSubmissions.filter(s => ['APPROVED', 'PAID'].includes(s.status));
   if (approvedOrPaid.length > 0) {
     const totalTime = approvedOrPaid.reduce((acc, curr) => {
-      const submitted = new Date(curr.submittedAt).getTime();
+      const submitted = new Date(curr.submittedAt || curr.createdAt).getTime();
       const approved = new Date(curr.updatedAt).getTime();
       return acc + (approved - submitted);
     }, 0);

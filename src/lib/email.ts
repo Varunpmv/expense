@@ -44,7 +44,7 @@ export async function sendEmail({ to, subject, text, html }: { to: string, subje
       console.log(`📧 MOCK EMAIL DISPATCHED TO: ${to}`);
       console.log(`Subject: ${subject}`);
       console.log('---------------------------------------');
-      console.log(info.message.toString());
+      console.log((info as any).message.toString());
       console.log('=======================================\n');
     } else {
       console.log(`📧 Actual email sent to ${to}: ${info.messageId}`);

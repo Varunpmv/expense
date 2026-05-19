@@ -163,7 +163,7 @@ export default function FinanceDashboard({ data }: { data: any }) {
     document.body.removeChild(link);
   };
 
-  const years = Array.from(new Set(data.submissions.map((s: any) => s.month.split('-')[0]))).sort().reverse();
+  const years = Array.from(new Set(data.submissions.map((s: any) => String(s.month).split('-')[0]))).sort().reverse() as string[];
   const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
   return (
