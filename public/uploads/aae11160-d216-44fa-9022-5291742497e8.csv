@@ -1,0 +1,9 @@
+Employee,Department,Month,Submitted On,Approved By,Total Amount,Status
+"John Employee","Sales","2026-04","4/23/2026","--",2000,"PAID"
+"John Employee","Sales","2026-04","4/23/2026","--",100000,"PAID"
+"John Employee","Sales","2026-04","4/23/2026","--",12345,"PAID"
+"varun","IT","2026-04","4/23/2026","--",7000,"PAID"
+"John Employee","Sales","2026-04","4/23/2026","--",3355,"PAID"
+"John Employee","Sales","2026-04","4/23/2026","--",30088,"PAID"
+"John Employee","Sales","March 2026","3/24/2026","--",8500,"PAID"
+"John Employee","Sales","March 2026","3/23/2026","--",8500,"PAID"

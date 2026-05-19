@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String           @id @default(uuid())
+  email               String           @unique
+  name                String
+  role                String           @default("EMPLOYEE")
+  createdAt           DateTime         @default(now())
+  department          String?
+  advanceAmount       Float            @default(0) // Total cumulative advance
+  expenses            Expense[]
+  approvedSubmissions Submission[]     @relation("ApprovedSubmissions")
+  submissions         Submission[]     @relation("UserSubmissions")
+  advances            AdvanceHistory[]
+}
+
+model AdvanceHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Float
+  date      DateTime @default(now())
+  notes     String?
+  createdAt DateTime @default(now())
+}
+
+model Expense {
+  id           String      @id @default(uuid())
+  userId       String
+  date         DateTime
+  amount       Float
+  account      String
+  expenseHead  String
+  expenseType  String
+  notes        String?
+  billUrl      String?
+  status       String      @default("DRAFT")
+  submissionId String?
+  month        String
+  customFields Json?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  submission   Submission? @relation(fields: [submissionId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([submissionId])
+}
+
+model Submission {
+  id           String    @id @default(uuid())
+  userId       String
+  name         String?   // Project Name
+  startDate    DateTime? // Project Start Date
+  endDate      DateTime? // Project End Date
+  month        String
+  expenseHead  String?
+  totalAmount  Float     @default(0)
+  status       String    @default("DRAFT") // Projects start as DRAFT
+  submittedAt  DateTime? // Only set when actually submitted
+  comments     String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  approvedById String?
+  expenses     Expense[]
+  approvedBy   User?     @relation("ApprovedSubmissions", fields: [approvedById], references: [id])
+  user         User      @relation("UserSubmissions", fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([approvedById], map: "Submission_approvedById_fkey")
+}
+
+model DropdownConfig {
+  id            String   @id @default(uuid())
+  type          String
+  value         String
+  approverEmail String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SystemSetting {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  value     String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CustomFieldDefinition {
+  id        String   @id @default(uuid())
+  name      String   // Field label
+  type      String   // 'TEXT' or 'SELECT'
+  options   String?  // Comma-separated options for SELECT type
+  required  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
